@@ -50,8 +50,7 @@ export async function POST(request: NextRequest) {
           content: buildUserPromptAnalisis(frase.trim(), respuesta.trim()),
         },
       ],
-      temperature: 0.3,
-      max_tokens: 500,
+      max_completion_tokens: 4000,
       response_format: { type: "json_object" },
     });
 

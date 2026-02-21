@@ -31,19 +31,25 @@ export function usePractica() {
     let sesionId: string;
     try {
       const res = await fetch("/api/sesion", { method: "POST" });
-      if (!res.ok) throw new Error("Error al crear sesión");
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || `HTTP ${res.status}`);
+      }
       const data = await res.json();
       sesionId = data.sesionId;
-    } catch {
-      setError("No se pudo iniciar la sesión. Inténtalo de nuevo.");
-      setEstado("idle");
+    } catch (err) {
+      console.error("[empezar] Error al crear sesión:", err);
+      setState((s) => ({ ...s, estado: "idle", error: "No se pudo iniciar la sesión. Inténtalo de nuevo." }));
       return;
     }
 
     // Obtener primera frase
     try {
       const res = await fetch("/api/frase");
-      if (!res.ok) throw new Error("Error al obtener frase");
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || `HTTP ${res.status}`);
+      }
       const data = await res.json();
 
       setState((s) => ({
@@ -56,9 +62,10 @@ export function usePractica() {
         rondaActual: 1,
         error: null,
       }));
-    } catch {
-      setError("No se pudo cargar la frase. Inténtalo de nuevo.");
-      setEstado("idle");
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Error desconocido";
+      console.error("[empezar] Error al cargar frase:", msg);
+      setState((s) => ({ ...s, estado: "idle", error: msg }));
     }
   }, []);
 

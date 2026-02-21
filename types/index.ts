@@ -28,9 +28,13 @@ export interface Session {
   rounds?: Round[];
 }
 
+export type SubscriptionTier = 'free' | 'pro';
+
 export interface Profile {
   id: string;
   email: string;
+  subscription_tier: SubscriptionTier;
+  subscription_updated_at: string | null;
   created_at: string;
 }
 

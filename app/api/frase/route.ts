@@ -23,9 +23,7 @@ export async function GET() {
         { role: "system", content: SYSTEM_PROMPT_FRASE },
         { role: "user", content: USER_PROMPT_FRASE },
       ],
-      temperature: 1.0,
-      max_tokens: 100,
-      presence_penalty: 0.8,
+      max_completion_tokens: 2000,
     });
 
     const frase = completion.choices[0]?.message?.content?.trim();
@@ -36,9 +34,10 @@ export async function GET() {
 
     return NextResponse.json({ frase });
   } catch (error) {
-    console.error("[/api/frase] Error:", error);
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error("[/api/frase] Error:", msg);
     return NextResponse.json(
-      { error: "Error al generar la frase" },
+      { error: `Error al generar la frase: ${msg}` },
       { status: 500 }
     );
   }

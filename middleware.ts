@@ -37,7 +37,14 @@ export async function middleware(request: NextRequest) {
   }
 
   // Proteger rutas de la app — redirigir a login si no está autenticado
-  if (!user && (pathname.startsWith("/practica") || pathname.startsWith("/historial"))) {
+  // Nota: /api/webhooks/stripe NO está aquí — Stripe lo llama sin sesión de usuario
+  if (
+    !user &&
+    (pathname.startsWith("/practica") ||
+      pathname.startsWith("/historial") ||
+      pathname.startsWith("/upgrade") ||
+      pathname.startsWith("/success"))
+  ) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 

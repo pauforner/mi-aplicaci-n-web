@@ -3,11 +3,13 @@
 -- Ejecuta este archivo en el SQL Editor de Supabase
 -- ============================================================
 
--- PROFILES: extiende auth.users con datos públicos
+-- PROFILES: extiende auth.users con datos públicos y estado de suscripción
 CREATE TABLE public.profiles (
-  id         UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-  email      TEXT NOT NULL,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  id                    UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  email                 TEXT NOT NULL,
+  subscription_tier     TEXT NOT NULL DEFAULT 'free' CHECK (subscription_tier IN ('free', 'pro')),
+  subscription_updated_at TIMESTAMPTZ,
+  created_at            TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 -- SESSIONS: una sesión por cada vez que el usuario pulsa "Empezar"

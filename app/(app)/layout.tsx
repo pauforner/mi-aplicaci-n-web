@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import LogoutButton from "@/components/auth/LogoutButton";
+import Badge from "@/components/ui/Badge";
 
 export default async function AppLayout({
   children,
@@ -15,6 +16,14 @@ export default async function AppLayout({
 
   if (!user) redirect("/login");
 
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("subscription_tier")
+    .eq("id", user.id)
+    .single();
+
+  const isPro = profile?.subscription_tier === "pro";
+
   return (
     <div className="min-h-screen bg-texture">
       {/* Header */}
@@ -25,6 +34,11 @@ export default async function AppLayout({
             <span className="font-display text-warm-900 font-medium hidden sm:block">
               Practica la Asertividad
             </span>
+            {isPro && (
+              <Badge variant="emerald" className="hidden sm:inline-flex">
+                Pro
+              </Badge>
+            )}
           </div>
 
           <nav className="flex items-center gap-1">
@@ -40,6 +54,14 @@ export default async function AppLayout({
             >
               Historial
             </Link>
+            {!isPro && (
+              <Link
+                href="/upgrade"
+                className="px-3 py-1.5 text-sm font-body font-medium text-amber-600 hover:text-amber-700 hover:bg-amber-50 rounded-xl transition-colors"
+              >
+                Pro ✦
+              </Link>
+            )}
             <div className="w-px h-4 bg-cream-300 mx-1" />
             <LogoutButton />
           </nav>
