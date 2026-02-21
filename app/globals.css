@@ -2,26 +2,87 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #faf8f3;
+    --foreground: #2c2a27;
+    --card: #ffffff;
+    --border: #e8e4dc;
+    --sage: #4d824d;
+    --sage-light: #e4efe4;
+    --amber: #d96f2e;
+    --amber-light: #faeada;
+    --muted: #8a8480;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-dm-sans), system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-fraunces), Georgia, serif;
+    font-weight: 600;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  ::selection {
+    background-color: #c6dfc6;
+    color: #2c2a27;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* Animaciones de entrada escalonada */
+  .stagger-1 { animation-delay: 0ms; }
+  .stagger-2 { animation-delay: 100ms; }
+  .stagger-3 { animation-delay: 200ms; }
+  .stagger-4 { animation-delay: 300ms; }
+
+  /* Textura de fondo sutil */
+  .bg-texture {
+    background-image:
+      radial-gradient(circle at 20% 20%, rgba(107, 158, 107, 0.06) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(196, 165, 106, 0.06) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(250, 234, 218, 0.04) 0%, transparent 70%);
+  }
+
+  /* Card con hover suave */
+  .card-hover {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 40px rgba(44, 42, 39, 0.12);
+  }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  .animate-delay-100 { animation-delay: 100ms; }
+  .animate-delay-200 { animation-delay: 200ms; }
+  .animate-delay-300 { animation-delay: 300ms; }
+  .animate-delay-400 { animation-delay: 400ms; }
+  .animate-delay-500 { animation-delay: 500ms; }
+
+  /* Opacity inicial 0 para elementos con animación */
+  .animate-fade-up,
+  .animate-fade-in,
+  .animate-scale-in {
+    opacity: 0;
+    animation-fill-mode: forwards;
   }
 }
