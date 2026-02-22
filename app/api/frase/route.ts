@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { openai, MODEL } from "@/lib/openai/client";
+import { getOpenAI, MODEL } from "@/lib/openai/client";
 import {
   SYSTEM_PROMPT_FRASE,
   USER_PROMPT_FRASE,
@@ -17,7 +17,7 @@ export async function GET() {
   }
 
   try {
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAI().chat.completions.create({
       model: MODEL,
       messages: [
         { role: "system", content: SYSTEM_PROMPT_FRASE },
